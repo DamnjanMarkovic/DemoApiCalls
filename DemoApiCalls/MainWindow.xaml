@@ -51,9 +51,6 @@
             </StackPanel>
 
 
-
-
-
             <StackPanel Orientation="Horizontal" Margin="20">
                 
                 <!--Button Input From Slot 1-->
@@ -82,7 +79,7 @@
         </StackPanel>
 
         <Border Grid.Row="1" Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="2">
-            <TextBox TextWrapping="Wrap" 
+            <TextBox TextWrapping="Wrap" FontSize="20"
                        Height="350" Width="500"
                        Text="{Binding Text}"
                        />

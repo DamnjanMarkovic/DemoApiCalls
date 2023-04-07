@@ -57,27 +57,25 @@ namespace DemoApiCalls.ViewModels
             {
                 case ApiCallsEnum.GetAllInputs:
                     Text = string.Empty;
-                    Text += "Request for all inputs initiated.\n\n";
+                    Text += "Request for all inputs initiated.\n";
                     response = await APICallsService.GetAllInputsFromAPI();
-                    Text += "Request for all inputs completed.\n\n";
                     break;
                 case ApiCallsEnum.GetSpecificInput:
                     Text = string.Empty;
-                    Text += "Request for specific input initiated.\n\n";
+                    Text += "Request for specific input initiated.\n";
                     response = await APICallsService.GetSpecificInputFromAPI();
-                    Text += "Request for specific input completed.\n\n";
                     break;
                 case ApiCallsEnum.GetInputsForSlot1:
                     Text = string.Empty;
-                    Text += "Request for input for slot 1 initiated.\n\n";
+                    Text += "Request for input for slot 1 initiated.\n";
                     response = await APICallsService.GetInputForSlot1FromAPI();
-                    Text += "Request for all input for slot 1 completed.\n\n";
                     break;
                 case ApiCallsEnum.SetColors:
                     Text = string.Empty;
-                    Text += "Request for colors setting initiated.\n\n";
+                    Text += "Request for colors setting initiated.\n";
+                    Text += "Sending:\n";
+                    Text += $"{APICallsService.PrepareJsonForPost()}.\n\n";
                     response = await APICallsService.SetColorsOnAPI();
-                    Text += "Request for colors setting completed.\n\n";
                     break;
                 default:
                     break;
@@ -86,33 +84,38 @@ namespace DemoApiCalls.ViewModels
 
             SetResultToTextBox(response);
 
+            Text += "Request completed.\n";
 
         }
 
         private void SetResultToTextBox(IRestResponse<object> result)
         {
-            if (result != null)
+            if (result == null)
             {
-                Text += "No answer received from API.\n\n";
+                Text += "No answer received from API.\n";
                 return;
             }
             if (result != null && result.Content != null)
             {
-                Text += "Some answer received from API.\n\n";
+                Text += "Answer received from API; ";
 
                 if (result.StatusCode == System.Net.HttpStatusCode.OK) 
                 {
-                    Text += "Some answer received from API. Status Code OK.\n\n";
+                    Text += "Status Code OK.\n";
                     try
                     {
                         var deserializedresponse = JsonConvert.DeserializeObject(result.Content);
-                        Text += $"Response from API: {deserializedresponse}\n\n";
+                        Text += $"Response from API: {deserializedresponse}\n";
                     }
                     catch (Exception ex)
                     {
 
-                        Text += $"Error receiving data from API. Error: {ex.Message}\n\n";
+                        Text += $"Error receiving data from API. Error: {ex.Message}\n";
                     }
+                }
+                else
+                {
+                    Text += "Status Code NOT OK.\n";
                 }
             }
         }
