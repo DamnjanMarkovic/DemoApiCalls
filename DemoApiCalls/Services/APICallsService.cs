@@ -9,15 +9,16 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Policy;
 
 namespace DemoApiCalls.Services
 {
     public class APICallsService
     {
-        private static readonly string baseURL = "https://127.0.0.1/v1/inputs";
+        //private static readonly string baseURL = "https://127.0.0.1/v1/inputs";
         //private static readonly string baseURL = "https://localhost:44308/v1/inputs";
 
-        public static async Task<IRestResponse<object>> GetAllInputsFromAPI()
+        public static async Task<IRestResponse<object>> GetAllInputsFromAPI(string url)
         {
             #region SSL Addendum
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -30,7 +31,7 @@ namespace DemoApiCalls.Services
 
             IRestResponse<object> response;
 
-            Uri apiCallUri = new Uri($"{baseURL}");
+            Uri apiCallUri = new Uri($"{url}");
 
             // Prepare REST service communication
 
@@ -52,7 +53,7 @@ namespace DemoApiCalls.Services
             return response;
         }
 
-        public static async Task<IRestResponse<object>> GetSpecificInputFromAPI()
+        public static async Task<IRestResponse<object>> GetSpecificInputFromAPI(string url)
         {
             #region SSL Addendum
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -65,7 +66,7 @@ namespace DemoApiCalls.Services
 
             IRestResponse<object> response;
 
-            Uri apiCallUri = new Uri($"{baseURL}/0");
+            Uri apiCallUri = new Uri($"{url}");
 
             // Prepare REST service communication
 
@@ -87,7 +88,7 @@ namespace DemoApiCalls.Services
             return response;
         }
 
-        public static async Task<IRestResponse<object>> GetInputForSlot1FromAPI()
+        public static async Task<IRestResponse<object>> GetInputForSlot1FromAPI(string url)
         {
             #region SSL Addendum
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -100,7 +101,7 @@ namespace DemoApiCalls.Services
 
             IRestResponse<object> response;
 
-            Uri apiCallUri = new Uri($"{baseURL}?slot-num=1");
+            Uri apiCallUri = new Uri($"{url}");
 
             // Prepare REST service communication
 
@@ -122,7 +123,7 @@ namespace DemoApiCalls.Services
             return response;
         }
 
-        public static async Task<IRestResponse<object>> SetColorsOnAPI()
+        public static async Task<IRestResponse<object>> SetColorsOnAPI(string url)
         {
             #region SSL Addendum
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -135,7 +136,7 @@ namespace DemoApiCalls.Services
 
             IRestResponse<object> response;
 
-            Uri apiCallUri = new Uri($"{baseURL}");
+            Uri apiCallUri = new Uri($"{url}");
 
             
 

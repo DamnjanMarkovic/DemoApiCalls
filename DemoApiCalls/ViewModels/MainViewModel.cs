@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -28,6 +29,20 @@ namespace DemoApiCalls.ViewModels
             {
                 _text = value;
                 OnPropertyChanged(nameof(Text));
+            }
+        }
+
+        private string _urlString;
+        public string UrlString
+        {
+            get
+            {
+                return _urlString;
+            }
+            set
+            {
+                _urlString = value;
+                OnPropertyChanged(nameof(UrlString));
             }
         }
         #endregion
@@ -51,6 +66,15 @@ namespace DemoApiCalls.ViewModels
 
         private async void PerformAPICall(object enumObject)
         {
+            if (string.IsNullOrEmpty(UrlString))
+            {
+                MessageBox.Show("Please enter URL");
+                return;
+            }
+
+            string url = string.Empty;
+
+
             var enumArrived = (ApiCallsEnum)enumObject;
             IRestResponse<object> response = new RestResponse<object>();
             switch (enumArrived)
@@ -58,24 +82,32 @@ namespace DemoApiCalls.ViewModels
                 case ApiCallsEnum.GetAllInputs:
                     Text = string.Empty;
                     Text += "Request for all inputs initiated.\n";
-                    response = await APICallsService.GetAllInputsFromAPI();
+                    url = $"{UrlString}/v1/inputs";
+                    Text += $"URL: {url}\n";
+                    response = await APICallsService.GetAllInputsFromAPI(url);
                     break;
                 case ApiCallsEnum.GetSpecificInput:
                     Text = string.Empty;
                     Text += "Request for specific input initiated.\n";
-                    response = await APICallsService.GetSpecificInputFromAPI();
+                    url = $"{UrlString}/v1/inputs/0";
+                    Text += $"URL: {url}\n";
+                    response = await APICallsService.GetSpecificInputFromAPI(url);
                     break;
                 case ApiCallsEnum.GetInputsForSlot1:
                     Text = string.Empty;
                     Text += "Request for input for slot 1 initiated.\n";
-                    response = await APICallsService.GetInputForSlot1FromAPI();
+                    url = $"{UrlString}/v1/inputs?slot-num=1";
+                    Text += $"URL: {url}\n";
+                    response = await APICallsService.GetInputForSlot1FromAPI(url);
                     break;
                 case ApiCallsEnum.SetColors:
                     Text = string.Empty;
                     Text += "Request for colors setting initiated.\n";
                     Text += "Sending:\n";
                     Text += $"{APICallsService.PrepareJsonForPost()}.\n\n";
-                    response = await APICallsService.SetColorsOnAPI();
+                    url = $"{UrlString}/v1/inputs";
+                    Text += $"URL: {url}\n";
+                    response = await APICallsService.SetColorsOnAPI(url);
                     break;
                 default:
                     break;

@@ -26,6 +26,23 @@
         
         <StackPanel Grid.Row="1" Grid.Column="0" 
                     HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Content="Please enter URL: "
+                       Foreground="White" FontSize="20"
+                       
+                       
+                       />
+
+                <TextBox Text="{Binding UrlString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" 
+                     FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                     VerticalAlignment="Center" VerticalContentAlignment="Center"
+                     Background="AliceBlue" Width="300" Height="40" 
+                     />
+            </StackPanel>
+
+            <Border BorderBrush="LightGray" BorderThickness="2" Margin="10"/>
+                
+
 
             <StackPanel Orientation="Horizontal" Margin="20">
                 
