@@ -1,0 +1,19 @@
+﻿<Application x:Class="DemoApiCalls.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DemoApiCalls"
+             StartupUri="MainWindow.xaml"
+             xmlns:customConverters="clr-namespace:DemoApiCalls.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!--Converters-->
+            <customConverters:NullImageConverter x:Key="NullImageConverter"/>
+
+            <ResourceDictionary.MergedDictionaries>
+                <!--Style for this project-->
+                <ResourceDictionary Source="../Style/CommonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

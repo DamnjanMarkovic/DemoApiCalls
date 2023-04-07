@@ -1,0 +1,94 @@
+﻿<Window x:Class="DemoApiCalls.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DemoApiCalls"
+        xmlns:viewModel="clr-namespace:DemoApiCalls.ViewModels"
+        xmlns:customControls="clr-namespace:DemoApiCalls.CustomControls"
+        mc:Ignorable="d" xmlns:models="clr-namespace:DemoApiCalls.Models"
+        Title="MainWindow" Height="650" Width="1200">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="DEMO API Calls" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
+               FontSize="34" Foreground="White"/>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal" Margin="20">
+                
+                <!--Button GetAllInputs-->
+                <customControls:CustomButton    
+                            Width="200" Height="100"
+                            Command="{Binding PerformAPICallCommand}" 
+                            CommandParameter="{x:Static models:ApiCallsEnum.GetAllInputs}"
+                            LabelContent="Get All Inputs" 
+                            SVGImageURL="/Resources/AllInputs.svg"
+                    />
+
+
+                <!--Button Get Specific Input-->
+
+                <customControls:CustomButton    
+                            Width="200" Height="100"
+                            Command="{Binding PerformAPICallCommand}" 
+                            CommandParameter="{x:Static models:ApiCallsEnum.GetSpecificInput}"
+                            LabelContent="Get Specific Input" 
+                            SVGImageURL="/Resources/OneInput.svg"
+                    />
+            </StackPanel>
+
+
+
+
+
+            <StackPanel Orientation="Horizontal" Margin="20">
+                
+                <!--Button Input From Slot 1-->
+
+                <customControls:CustomButton    
+                            Width="200" Height="100"
+                            Command="{Binding PerformAPICallCommand}" 
+                            CommandParameter="{x:Static models:ApiCallsEnum.GetInputsForSlot1}"
+                            LabelContent="Get Input From Slot 1" 
+                            SVGImageURL="/Resources/OneInput.svg"
+                    />
+
+                <!--Button SetColors-->
+
+                <customControls:CustomButton    
+                            Width="200" Height="100"
+                            Command="{Binding PerformAPICallCommand}" 
+                            CommandParameter="{x:Static models:ApiCallsEnum.SetColors}"
+                            LabelContent="Set Colors" 
+                            SVGImageURL="/Resources/SetColor.svg"
+                    />
+            </StackPanel>
+
+            
+            
+        </StackPanel>
+
+        <Border Grid.Row="1" Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="2">
+            <TextBox TextWrapping="Wrap" 
+                       Height="350" Width="500"
+                       Text="{Binding Text}"
+                       />
+        </Border>
+
+
+
+    </Grid>
+</Window>

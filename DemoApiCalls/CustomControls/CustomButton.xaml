@@ -1,0 +1,74 @@
+﻿<Button x:Class="DemoApiCalls.CustomControls.CustomButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DemoApiCalls.CustomControls"
+              xmlns:customControls="clr-namespace:DemoApiCalls.CustomControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Button.Resources>
+
+        <!--Style CustomButton-->
+        <Style TargetType="local:CustomButton" >
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:CustomButton" >
+                        <Border x:Name="border"   
+                            VerticalAlignment="{Binding Path=VerticalAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}" 
+                            BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"
+                            BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"
+                            CornerRadius = "{Binding Path=CornerRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"                            
+                            Background="{Binding Path=Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"
+                            Height="{Binding Path=Height, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"
+                            Width="{Binding Path=Width, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"
+                            >
+
+                            <customControls:IButton  x:Name="button"
+                            SVGImageURL="{TemplateBinding SVGImageURL}"
+                            ImageHeight="{TemplateBinding ImageHeight}"
+                            LabelContent="{TemplateBinding LabelContent}"
+                            PathDataValue="{TemplateBinding PathDataValue}"
+                            ImageURL="{TemplateBinding ImageURL}"
+                            MarginImage="{TemplateBinding MarginImage}"
+                            Width="{TemplateBinding Width}"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            Padding="{TemplateBinding ImagePadding}"
+                            />
+
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <!--<Setter Property="Background" TargetName="button" Value="gray"/>-->
+                                <!--<Setter Property="Padding" Value="5"/>-->
+                                <Setter Property="MarginImage" Value="10"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter Property="Foreground" TargetName="button" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" TargetName="button" 
+                                        Value="{Binding Path=ForegroundOnNotEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomButton}}}"/>
+                                <Setter Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Button.Resources>
+</Button>

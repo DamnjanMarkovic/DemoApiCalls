@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="DemoApiCalls.CustomControls.IButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DemoApiCalls.CustomControls"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"       
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid Background="{Binding Path=Background, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+          
+          >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding Path=ImageHeight, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="ImageOrPath" 
+            Margin="{Binding Path=MarginImage, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                                        >
+            <!--IF SVG Image IS SET, IT WILL BE SHOWN && Color will not be changed
+                    If needed, color can be set by opening SVG in text editor and changing color
+                
+                -->
+            <svgc:SvgViewbox 
+                    Source="{Binding Path=SVGImageURL, Converter={StaticResource NullImageConverter}, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"                                        
+                                        />
+
+            <!--IF PATH DATA IS SET, IT WILL BE SHOWN && Color will be the same as text
+                -->
+            <Path 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="{Binding Path=PathDataValue, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                    Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"     
+                    Stretch="Uniform"/>
+
+            <!--IF IMAGE IS SET, IT WILL BE SHOWN-->
+            <Image
+                    Source="{Binding Path=ImageURL, Converter={StaticResource NullImageConverter}, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                                    />
+        </Grid>
+
+        <!--TextBlock with text-->
+        <Border 
+                    Grid.Row="1" 
+                    Width="{Binding Path=Width, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"                                                                
+                    HorizontalAlignment="Center">
+            
+            <TextBlock                                     
+                    HorizontalAlignment="{Binding Path=HorizontalAlignment, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                    VerticalAlignment="Center" 
+                    Foreground="{Binding Path=Foreground, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                    Text="{Binding Path=LabelContent, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                    FontSize="{Binding Path=FontSize, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type local:IButton}}}"
+                    TextWrapping="Wrap"/>
+        </Border>
+    </Grid>
+
+</UserControl>
