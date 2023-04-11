@@ -11,6 +11,6 @@ namespace DemoApiCalls.Models
         GetAllInputs, 
         GetSpecificInput, 
         GetInputsForSlot1, 
-        SetColors
+        SetColors, SetColors1, SetColors2
     }
 }

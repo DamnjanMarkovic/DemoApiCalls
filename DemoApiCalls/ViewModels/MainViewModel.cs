@@ -5,7 +5,10 @@ using Prism.Commands;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +32,20 @@ namespace DemoApiCalls.ViewModels
             {
                 _text = value;
                 OnPropertyChanged(nameof(Text));
+            }
+        }
+
+        private int _id = 1;
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -84,7 +101,12 @@ namespace DemoApiCalls.ViewModels
                     Text += "Request for all inputs initiated.\n";
                     url = $"{UrlString}/v1/inputs";
                     Text += $"URL: {url}\n";
-                    response = await APICallsService.GetAllInputsFromAPI(url);
+                    //RestSharp
+                    //response = await APICallsService.GetAllInputsFromAPI(url);
+
+                    //  HttpClient
+                    var responseHttpClient = await APICallsService.GetAllInputsFromAPI(url);
+                    SetHttpClientResultToTextBox(await responseHttpClient.Content.ReadAsStringAsync());
                     break;
                 case ApiCallsEnum.GetSpecificInput:
                     Text = string.Empty;
@@ -92,6 +114,7 @@ namespace DemoApiCalls.ViewModels
                     url = $"{UrlString}/v1/inputs/0";
                     Text += $"URL: {url}\n";
                     response = await APICallsService.GetSpecificInputFromAPI(url);
+                    SetResultToTextBox(response);
                     break;
                 case ApiCallsEnum.GetInputsForSlot1:
                     Text = string.Empty;
@@ -99,22 +122,49 @@ namespace DemoApiCalls.ViewModels
                     url = $"{UrlString}/v1/inputs?slot-num=1";
                     Text += $"URL: {url}\n";
                     response = await APICallsService.GetInputForSlot1FromAPI(url);
+                    SetResultToTextBox(response);
                     break;
+
+                //Set Colors API Calls
                 case ApiCallsEnum.SetColors:
                     Text = string.Empty;
                     Text += "Request for colors setting initiated.\n";
                     Text += "Sending:\n";
-                    Text += $"{APICallsService.PrepareJsonForPost()}.\n\n";
+                    Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
                     url = $"{UrlString}/v1/inputs";
                     Text += $"URL: {url}\n";
-                    response = await APICallsService.SetColorsOnAPI(url);
+                    Text += $"ID Sending: {Id}\n";
+                    response = await APICallsService.SetColorsOnAPI(url, Id);
+                    SetResultToTextBox(response);
+                    break;
+                case ApiCallsEnum.SetColors1:
+                    Text = string.Empty;
+                    Text += "Request for colors setting 1 initiated.\n";
+                    Text += "Sending:\n";
+                    Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
+                    url = $"{UrlString}/v1/inputs";
+                    Text += $"URL: {url}\n";
+                    Text += $"ID Sending: {Id}\n";
+                    var response1 = await APICallsService.SetColorsOnAPI1(url, Id);
+                    SetHttpClientResultToTextBox(await response1.Content.ReadAsStringAsync());
+                    break;
+                case ApiCallsEnum.SetColors2:
+                    Text = string.Empty;
+                    Text += "Request for colors setting 2 initiated.\n";
+                    Text += "Sending:\n";
+                    Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
+                    url = $"{UrlString}/v1/inputs";
+                    Text += $"URL: {url}\n";
+                    Text += $"ID Sending: {Id}\n";
+                    var response2 = await APICallsService.SetColorsOnAPI2(url, Id);
+                    SetHttpClientResultToTextBox(await response2.Content.ReadAsStringAsync());
                     break;
                 default:
                     break;
             }
 
 
-            SetResultToTextBox(response);
+            //SetResultToTextBox(response);
 
             Text += "Request completed.\n";
 
@@ -137,6 +187,38 @@ namespace DemoApiCalls.ViewModels
                     try
                     {
                         var deserializedresponse = JsonConvert.DeserializeObject(result.Content);
+                        Text += $"Response from API: {deserializedresponse}\n";
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Text += $"Error receiving data from API. Error: {ex.Message}\n";
+                    }
+                }
+                else
+                {
+                    Text += "Status Code NOT OK.\n";
+                }
+            }
+        }
+
+        private void SetHttpClientResultToTextBox(string result)
+        {
+            if (result == null)
+            {
+                Text += "No answer received from API.\n";
+                return;
+            }
+            if (!string.IsNullOrEmpty(result))
+            {
+                Text += "Answer received from API; ";
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Text += "Status Code OK.\n";
+                    try
+                    {
+                        var deserializedresponse = JsonConvert.DeserializeObject(result);
                         Text += $"Response from API: {deserializedresponse}\n";
                     }
                     catch (Exception ex)
