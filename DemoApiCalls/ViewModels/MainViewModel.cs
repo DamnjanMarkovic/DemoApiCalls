@@ -145,7 +145,7 @@ namespace DemoApiCalls.ViewModels
                     Text += "Request for colors setting 1 initiated.\n";
                     Text += "Sending:\n";
                     Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
-                    url = $"{UrlString}/v1/inputs";
+                    url = $"{UrlString}";
                     Text += $"ID Sending: {Id}\n";
                     await SetColorsOnAPI1(url, Id);
                     //SetHttpClientResultToTextBox(await response1.Content.ReadAsStringAsync());
@@ -351,15 +351,15 @@ namespace DemoApiCalls.ViewModels
         {
             using var client = new HttpClient();
 
-            var requestUri = "http://192.168.200.170:8080/v1/presets/9";
+            //url = "http://192.168.200.170:8080/v1/presets/9";
             var jsonContent = "{\"action\":\"load\"}";
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
 
-            Text += $"URL: {requestUri}\n";
+            Text += $"URL: {url}\n";
             try
             {
-                var response = await client.PutAsync(requestUri, content);
+                var response = await client.PutAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
                     Text += "Request succeeded!\n";

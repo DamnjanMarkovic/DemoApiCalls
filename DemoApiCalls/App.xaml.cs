@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DemoApiCalls.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,9 @@ namespace DemoApiCalls
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            //KeepAwake.SetAlwaysAwake(true);
+        }
     }
 }
