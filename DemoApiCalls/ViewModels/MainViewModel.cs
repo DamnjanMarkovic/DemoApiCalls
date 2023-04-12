@@ -9,6 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -132,10 +135,10 @@ namespace DemoApiCalls.ViewModels
                     Text += "Sending:\n";
                     Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
                     url = $"{UrlString}/v1/inputs";
-                    Text += $"URL: {url}\n";
+                    //Text += $"URL: {url}\n";
                     Text += $"ID Sending: {Id}\n";
-                    response = await APICallsService.SetColorsOnAPI(url, Id);
-                    SetResultToTextBox(response);
+                    await SetColorsOnAPI(url, Id);
+                    //SetResultToTextBox(response);
                     break;
                 case ApiCallsEnum.SetColors1:
                     Text = string.Empty;
@@ -143,10 +146,9 @@ namespace DemoApiCalls.ViewModels
                     Text += "Sending:\n";
                     Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
                     url = $"{UrlString}/v1/inputs";
-                    Text += $"URL: {url}\n";
                     Text += $"ID Sending: {Id}\n";
-                    var response1 = await APICallsService.SetColorsOnAPI1(url, Id);
-                    SetHttpClientResultToTextBox(await response1.Content.ReadAsStringAsync());
+                    await SetColorsOnAPI1(url, Id);
+                    //SetHttpClientResultToTextBox(await response1.Content.ReadAsStringAsync());
                     break;
                 case ApiCallsEnum.SetColors2:
                     Text = string.Empty;
@@ -154,10 +156,10 @@ namespace DemoApiCalls.ViewModels
                     Text += "Sending:\n";
                     Text += $"{APICallsService.PrepareJsonForPost(Id)}.\n\n";
                     url = $"{UrlString}/v1/inputs";
-                    Text += $"URL: {url}\n";
+                    //Text += $"URL: {url}\n";
                     Text += $"ID Sending: {Id}\n";
-                    var response2 = await APICallsService.SetColorsOnAPI2(url, Id);
-                    SetHttpClientResultToTextBox(await response2.Content.ReadAsStringAsync());
+                    await SetColorsOnAPI2(url, Id);
+                    //SetHttpClientResultToTextBox(await response2.Content.ReadAsStringAsync());
                     break;
                 default:
                     break;
@@ -168,6 +170,213 @@ namespace DemoApiCalls.ViewModels
 
             Text += "Request completed.\n";
 
+        }
+
+        public async Task SetColorsOnAPI(string url, int Id)
+        {
+            #region SSL Addendum
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+            ServicePointManager.ServerCertificateValidationCallback =
+                delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                {
+                    return true;
+                };
+            #endregion
+
+            IRestResponse<object> response;
+
+            Uri apiCallUri = new Uri($"{url}");
+
+            Text += $"URL: {url}\n";
+
+            // Prepare REST service communication
+
+            RestClient serviceClient = new RestClient(apiCallUri);
+            RestRequest request = new RestRequest(Method.PUT);
+
+            // Prepare request header
+            request.AddHeader(@"Accept", @"application/json");
+            var stringJson = "{\"id\":1,\"red\":80,\"green\":85,\"blue\":70}";
+
+            try
+            {
+                request.AddParameter("application/json", stringJson, ParameterType.RequestBody);
+
+                response = await ExecuteAsync<object>(serviceClient, request);
+
+                if (response != null)
+                {
+                    Text += "response != null\n";
+
+                
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    Text += "response != null && response.StatusCode == HttpStatusCode.OK\n";
+                    
+                }
+                else if (response != null && response.StatusCode != HttpStatusCode.OK)
+                    {
+                        Text += "response != null && response.StatusCode != HttpStatusCode.OK\n";
+                        Text += $"response.StatusCode : {response.StatusCode}\n";
+
+
+                    }
+                }
+                if (response.Content != null)
+                {
+
+                    Text += "response.Content != null\n";
+                    Text += $"response.Content: {response.Content}\n";
+                    var deserializedresponse = JsonConvert.DeserializeObject(response.Content);
+
+                    if (deserializedresponse != null)
+                    {
+                        Text += $"deserializedresponse != null\n";
+                        Text += $"deserializedresponse: {deserializedresponse} \n";
+                    }
+
+                }
+                if (response != null && response.ErrorMessage != null)
+                {
+
+                    Text += $"Error: {response.ErrorMessage}\n";
+                }
+                
+
+                else {
+
+                    Text += "response.Content == null\n";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Text += $"Exception happend; ex: {ex}, message: {ex.Message}\n";
+            }
+
+        }
+
+        public async Task SetColorsOnAPI2(string url, int Id)
+        {
+            using var client = new HttpClient();
+
+            var jsonContent = "{\"id\":1,\"red\":80,\"green\":85,\"blue\":70}";
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
+
+            Text += $"URL: {url}\n";
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync(url, content);
+
+                if (response != null)
+                {
+                    Text += "response != null\n";
+
+
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
+                    {
+                        Text += "response != null && response.StatusCode == HttpStatusCode.OK\n";
+
+                    }
+                    else if (response != null && response.StatusCode != HttpStatusCode.OK)
+                    {
+                        Text += "response != null && response.StatusCode != HttpStatusCode.OK\n";
+                        Text += $"response.StatusCode : {response.StatusCode}\n";
+
+
+                    }
+                }
+                if (response.Content != null)
+                {
+
+                    Text += "response.Content != null\n";
+                    Text += $"response.Content: {response.Content}\n";
+
+                    var res = response.Content.ReadAsStringAsync();
+                    Text += $"res: {res}\n";
+
+                    var deserializedresponse = JsonConvert.DeserializeObject(res.Result);
+
+                    if (deserializedresponse != null)
+                    {
+                        Text += $"deserializedresponse != null\n";
+                        Text += $"deserializedresponse: {deserializedresponse} \n";
+                    }
+
+                }
+         
+
+
+                else
+                {
+
+                    Text += "response.Content == null\n";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Text += $"Exception happend; ex: {ex}, message: {ex.Message}\n";
+            }
+
+        }
+
+        public static async Task<IRestResponse<T>> ExecuteAsync<T>(RestClient serviceClient, RestRequest request) where T : class, new()
+        {
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse<T>>();
+            serviceClient.ExecuteAsync<T>(request, (responseTask) => taskCompletionSource.SetResult(responseTask));
+
+            var response = await taskCompletionSource.Task;
+            return response;
+        }
+
+        public static string PrepareJsonForPost(int Id)
+        {
+            string result = string.Empty;
+            ColorsUpdateModel message = new ColorsUpdateModel()
+            {
+                InputId = Id,
+                InputRedGain = 80,
+                InputGreenGain = 85,
+                InputBlueGain = 70
+            };
+
+            return JsonConvert.SerializeObject(message);
+        }
+
+
+        //  Second Color call
+        public async Task SetColorsOnAPI1(string url, int Id)
+        {
+            using var client = new HttpClient();
+
+            var requestUri = "http://192.168.200.170:8080/v1/presets/9";
+            var jsonContent = "{\"action\":\"load\"}";
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
+
+            Text += $"URL: {requestUri}\n";
+            try
+            {
+                var response = await client.PutAsync(requestUri, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    Text += "Request succeeded!\n";
+                }
+                else
+                {
+                    Text += $"Request failed with status code: {response.StatusCode}\n";
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Text += $"Exception: {ex}, message: {ex.Message}\n";
+            }
+
+            
         }
 
         private void SetResultToTextBox(IRestResponse<object> result)

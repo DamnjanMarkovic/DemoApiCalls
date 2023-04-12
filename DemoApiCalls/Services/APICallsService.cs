@@ -165,111 +165,111 @@ namespace DemoApiCalls.Services
             return response;
         }
 
-        public static async Task<IRestResponse<object>> SetColorsOnAPI(string url, int Id)
-        {
-            #region SSL Addendum
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
-            ServicePointManager.ServerCertificateValidationCallback =
-                delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-                {
-                    return true;
-                };
-            #endregion
+        //public static async Task<IRestResponse<object>> SetColorsOnAPI(string url, int Id)
+        //{
+        //    #region SSL Addendum
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+        //    ServicePointManager.ServerCertificateValidationCallback =
+        //        delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        //        {
+        //            return true;
+        //        };
+        //    #endregion
 
-            IRestResponse<object> response;
+        //    IRestResponse<object> response;
 
-            Uri apiCallUri = new Uri($"{url}");
+        //    Uri apiCallUri = new Uri($"{url}");
 
 
 
-            // Prepare REST service communication
+        //    // Prepare REST service communication
 
-            RestClient serviceClient = new RestClient(apiCallUri);
-            RestRequest request = new RestRequest(Method.PUT);
+        //    RestClient serviceClient = new RestClient(apiCallUri);
+        //    RestRequest request = new RestRequest(Method.PUT);
 
-            // Prepare request header
-            request.AddHeader(@"Accept", @"application/json");
-            try
-            {
-                request.AddParameter("application/json", PrepareJsonForPost(Id), ParameterType.RequestBody);
+        //    // Prepare request header
+        //    request.AddHeader(@"Accept", @"application/json");
+        //    try
+        //    {
+        //        request.AddParameter("application/json", PrepareJsonForPost(Id), ParameterType.RequestBody);
 
-                response = await ExecuteAsync<object>(serviceClient, request);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in API Call. Message: {ex.Message}");
-                return null;
-            }
+        //        response = await ExecuteAsync<object>(serviceClient, request);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error in API Call. Message: {ex.Message}");
+        //        return null;
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
 
-        public static async Task<HttpResponseMessage> SetColorsOnAPI1(string url, int Id)
-        {
-            using var httpClient = new HttpClient();
+        //public static async Task<HttpResponseMessage> SetColorsOnAPI1(string url, int Id)
+        //{
+        //    using var httpClient = new HttpClient();
 
-            // create a JSON payload
-            //var payload = new { Name = "John", Age = 30 };
-            ColorsUpdateModel message = new ColorsUpdateModel()
-            {
-                InputId = Id,
-                InputRedGain = 80,
-                InputGreenGain = 85,
-                InputBlueGain = 70
-            };
-            // serialize the payload to JSON string
-            string jsonPayload = System.Text.Json.JsonSerializer.Serialize(message);
+        //    // create a JSON payload
+        //    //var payload = new { Name = "John", Age = 30 };
+        //    ColorsUpdateModel message = new ColorsUpdateModel()
+        //    {
+        //        InputId = Id,
+        //        InputRedGain = 80,
+        //        InputGreenGain = 85,
+        //        InputBlueGain = 70
+        //    };
+        //    // serialize the payload to JSON string
+        //    string jsonPayload = System.Text.Json.JsonSerializer.Serialize(message);
 
-            // create a request message with the JSON payload
-            var request = new HttpRequestMessage(HttpMethod.Put, url)
-            {
-                Content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json")
-            };
+        //    // create a request message with the JSON payload
+        //    var request = new HttpRequestMessage(HttpMethod.Put, url)
+        //    {
+        //        Content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json")
+        //    };
 
-            // send the request and get the response
-            HttpResponseMessage response; 
+        //    // send the request and get the response
+        //    HttpResponseMessage response; 
             
-            try
-            {
-                response = await httpClient.SendAsync(request);
+        //    try
+        //    {
+        //        response = await httpClient.SendAsync(request);
                 
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine("PUT request was successful.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in API Call. Message: {ex.Message}");
-                return null;
-            }
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            Console.WriteLine("PUT request was successful.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error in API Call. Message: {ex.Message}");
+        //        return null;
+        //    }
 
-            return response;
-        }
-        public static async Task<HttpResponseMessage> SetColorsOnAPI2(string url, int Id)
-        {
-            HttpResponseMessage response = null;
-            ColorsUpdateModel message = new ColorsUpdateModel()
-            {
-                InputId = Id,
-                InputRedGain = 80,
-                InputGreenGain = 85,
-                InputBlueGain = 70
-            };
+        //    return response;
+        //}
+        //public static async Task<HttpResponseMessage> SetColorsOnAPI2(string url, int Id)
+        //{
+        //    HttpResponseMessage response = null;
+        //    ColorsUpdateModel message = new ColorsUpdateModel()
+        //    {
+        //        InputId = Id,
+        //        InputRedGain = 80,
+        //        InputGreenGain = 85,
+        //        InputBlueGain = 70
+        //    };
 
-            string jsonData = System.Text.Json.JsonSerializer.Serialize(message);
+        //    string jsonData = System.Text.Json.JsonSerializer.Serialize(message);
 
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(url);
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
-                response = await client.PutAsync(url, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            }
+        //    using (var client = new HttpClient())
+        //    {
+        //        client.BaseAddress = new Uri(url);
+        //        client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+        //        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
+        //        response = await client.PutAsync(url, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        //    }
 
 
-            return response;
-        }
+        //    return response;
+        //}
         public static string PrepareJsonForPost(int Id)
         {
             string result = string.Empty;

@@ -100,7 +100,7 @@
                             Width="200" Height="100"
                             Command="{Binding PerformAPICallCommand}" 
                             CommandParameter="{x:Static models:ApiCallsEnum.SetColors}"
-                            LabelContent="Set Colors - 1" 
+                            LabelContent="Set Colors" 
                             SVGImageURL="/Resources/SetColor.svg"
                     />
 
